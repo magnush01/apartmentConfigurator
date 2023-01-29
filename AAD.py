@@ -59,7 +59,7 @@ def main():
     #-----------------------------------------------------------------------
     # Set up GUI
 
-    floor_length_x = 10
+    floor_length_x = 55
     floor_length_y = 8
     floor_ratio = 1/2
     floor_iterations = 2
