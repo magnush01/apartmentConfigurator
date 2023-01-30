@@ -59,7 +59,7 @@ def main():
     #-----------------------------------------------------------------------
     # Set up GUI
 
-    floor_length_x = 55
+    floor_length_x = 10
     floor_length_y = 8
     floor_ratio = 1/2
     floor_iterations = 2
@@ -88,7 +88,7 @@ def main():
     material = THREE.MeshBasicMaterial.new()
     material.color = THREE.Color.new(0xA32A8C)
     material.transparent = True
-    material.opacity = 0.15
+    material.opacity = 0.6
 
     # Line Material
     line_material = THREE.LineBasicMaterial.new()
@@ -121,7 +121,7 @@ def main():
     offset_in(final_rooms, 0.1)
     
     drawrooms(offset_rooms)
-    '''extrude(offset_rooms)'''
+    extrude(firstroom, offset_rooms)
     
 
     render()
@@ -246,29 +246,48 @@ def drawrooms(rooms):
         scene.add(line)
 
 # extrude Shape
-'''
+
 def extrude(boundary, rooms):
     shape_geometry = THREE.Shape.new()
-
+    #boundary extrusion
     shape_geometry.moveTo(boundary[0][0],boundary[0][1])
-    shape_geometry.lineTo(room[1][0],boundary[1][1])
-    shape_geometry.lineTo(room[2][0],boundary[2][1])
+    shape_geometry.lineTo(boundary[1][0],boundary[1][1])
+    shape_geometry.lineTo(boundary[2][0],boundary[2][1])
     shape_geometry.lineTo(boundary[3][0],boundary[3][1])
     shape_geometry.lineTo(boundary[0][0],boundary[0][1])
 
-    shape_geometry.moveTo(room[0][0],room[0][1])
-    shape_geometry.lineTo(room[1][0],room[1][1])
-    shape_geometry.lineTo(room[2][0],room[2][1])
-    shape_geometry.lineTo(room[3][0],room[3][1])
-    shape_geometry.lineTo(room[0][0],room[0][1])
+    #holes
 
-    extrudeSettings = (2, 16, True, 1, 1, 0, 1)
+    for room in rooms:
+
+        room_hole = THREE.Path.new()
+        
+        room_hole.moveTo(room[0][0],room[0][1])
+        room_hole.lineTo(room[1][0],room[1][1])
+        room_hole.lineTo(room[2][0],room[2][1])
+        room_hole.lineTo(room[3][0],room[3][1])
+        room_hole.lineTo(room[0][0],room[0][1])
+
+        shape_geometry.holes.push(room_hole)
+
     
+    extrudeSettings = (1,1,False,0,0,0,0)
+
+    '''extrudeSettings = {
+	steps: 200,
+	depth: 1600,
+	bevelEnabled: False,
+	bevelThickness: 1,
+	bevelSize: 1,
+	bevelOffset: 0,
+	bevelSegments: 1
+    }'''
+    
+
     geometry = THREE.ExtrudeGeometry.new( shape_geometry, extrudeSettings)
     mesh = THREE.Mesh.new(geometry, material)
     scene.add(mesh)
-    print(shape_geometry)
-'''
+
 
 #offset room inside function by changing the vertices
 def offset_in(rooms, d):
