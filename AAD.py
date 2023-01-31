@@ -66,21 +66,19 @@ def main():
     scene.add(axesHelper)
     #-----------------------------------------------------------------------
     # Set up GUI
-    global floorsettings, apartment_type, apartment_variation, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4
+    global floorsettings, apartment_type, apartment_variation, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4,r1,r2
 
     apartment_type = 1
-    apartment_variation = 1
+    apartment_variation = 5
     floor_length_x = 10
     floor_length_y = 10
-    floor_ratio_1 = 1
-    floor_ratio_2 = 1
-    floor_ratio_3 = 1
-    floor_ratio_4 = 1
-    floor_ratio_5 = 1
-    floor_ratio_6 = 1
-    floor_ratio_7 = 1
-    floor_ratio_8 = 1
-
+    
+    floor_ratio_1 = 1/2
+    floor_ratio_2 = 1/2
+    floor_ratio_3 = 1/2
+    floor_ratio_4 = 1/2
+    floor_ratio_5 = 1/2
+    floor_ratio_6 = 1/2
     
 
     floorsettings = {
@@ -94,8 +92,6 @@ def main():
         "ratio_4": floor_ratio_4,
         "ratio_5": floor_ratio_5,
         "ratio_6": floor_ratio_6,
-        "ratio_7": floor_ratio_7,
-        "ratio_8": floor_ratio_8
     }
     floorsettings = Object.fromEntries(to_js(floorsettings))
 
@@ -115,8 +111,6 @@ def main():
     param_folder.add(floorsettings,'ratio_4', 0.2,1.8)
     param_folder.add(floorsettings,'ratio_5', 0.2,1.8)
     param_folder.add(floorsettings,'ratio_6', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_7', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_8', 0.2,1.8)
     
     '''param_folder.open()'''
 
@@ -150,39 +144,41 @@ def main():
     firstroom = define_room(0, 0, floorsettings.length_x, 0, floorsettings.length_x , floorsettings.length_y, 0, floorsettings.length_y)
     new_rooms.append(firstroom)
 
-   
-    
-
 
     #Apartements
-    '''Apartment_GUI(floorsettings.apartment_type, floorsettings.apartment_variation,floorsettings.ratio_1,floorsettings.ratio_2,floorsettings.ratio_3,floorsettings.ratio_4,floorsettings.ratio_5,floorsettings.ratio_6,floorsettings.ratio_7,floorsettings.ratio_8)'''
-    
-    
     Apartement(floorsettings.apartment_type,floorsettings.apartment_variation)
-    '''Apartement(1,1,[1/2, 1/3, 2/4, 0, 0, 0, 2/3, 0, 0])'''
-    
-    
-    print(new_rooms)
-    print(final_rooms)
+   
     
     #offset rooms for Wall vertices
     offset_out(new_rooms[0], 0.2)
     offset_in(final_rooms, 0.1)
-    print(final_rooms)
+
 
     drawrooms(offset_rooms)
     drawrooms(offset_room_out)
     
     extrude(offset_room_out, offset_rooms)
     #squaremeters functions
-    squaremeters(offset_rooms)
+    '''squaremeters(offset_rooms)'''
 
-    
-    print(offset_rooms)
+
     render()
 #-----------------------------------------------------------------------
 # HELPER FUNCTIONS
-    
+
+
+
+
+
+'''def ratios_v():
+        if apartment_type == 1 & apartment_variation:
+            ratio_list = [1/2,1/3,1/4]
+            print(ratio_list)
+'''
+
+
+
+
 
 # Apartment function
 def Apartement(apartement_type, number):
@@ -199,18 +195,18 @@ def Apartement(apartement_type, number):
 #A1 = Loft
 def Apartement_1(number):
     if number == 1:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],[1/4*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 0, 0, 0, 1/2*floorsettings.ratio_4, 0, 0])
+        variante(['V', 'H', 'H', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
     elif number == 2:
-        variante(['V', 'H', 0, 0, 0,],[1/4*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 0, 0, 0])
+        variante(['H', 'H', 'V', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
     elif number == 3:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
+        variante(['V', 0,'H', 'H', 0, 0 ,0],[floorsettings.ratio_1,0,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0,0])
     elif number == 4:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
+        variante(['V','H',0, 'H', 0, 0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2,0, floorsettings.ratio_3, 0, 0,0])
     elif number == 5:
-        variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0])
+        variante(['H', 'V', 'V', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
     pass
 
-#A2 = single
+#A2 = Single
 def Apartement_2(number):
     if number == 1:
         variante(['V', 'H', 'H', 'H',0,0, 0, 0, 0],[1/3*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 1/2*floorsettings.ratio_4, 0,0,0, 0, 0, 1/2*floorsettings.ratio_5, 0, 0])
@@ -303,7 +299,6 @@ def extrude(boundary, rooms):
 
     
     extrudeSettings = (1,1,False,0,0,0,0)
-
     extrudeSettings = {
 	"steps": 10,
 	"depth": 3,
@@ -313,14 +308,7 @@ def extrude(boundary, rooms):
 	"bevelOffset": 0,
 	"bevelSegments": 1
     }
-
-
-
     extrudeSettings = Object.fromEntries(to_js(extrudeSettings))
-
-
-    
-
     geometry = THREE.ExtrudeGeometry.new( shape_geometry, extrudeSettings)
     mesh = THREE.Mesh.new(geometry, material)
     scene.add(mesh)
