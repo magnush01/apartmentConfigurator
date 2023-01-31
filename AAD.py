@@ -27,7 +27,8 @@ def main():
     back_color = THREE.Color.new(0xF0EEE9)
     scene.background = back_color
     camera = THREE.PerspectiveCamera.new(75, window.innerWidth/window.innerHeight, 0.1, 1000)
-    camera.position.z = 15
+    camera.position.z = 30
+    camera.position.x = 5
     scene.add(camera)
 
     # Directional light
@@ -67,10 +68,10 @@ def main():
     # Set up GUI
     global floorsettings, apartment_type, apartment_variation, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4
 
-    apartment_type = 2
+    apartment_type = 1
     apartment_variation = 1
     floor_length_x = 10
-    floor_length_y = 15
+    floor_length_y = 10
     floor_ratio_1 = 1
     floor_ratio_2 = 1
     floor_ratio_3 = 1
@@ -108,14 +109,14 @@ def main():
     param_folder.add(floorsettings,'length_y', 1,20)
 
     param_folder = gui.addFolder('Ratios')
-    param_folder.add(floorsettings,'ratio_1', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_2', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_3', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_4', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_5', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_6', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_7', 0.1,0.9)
-    param_folder.add(floorsettings,'ratio_8', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_1', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_2', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_3', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_4', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_5', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_6', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_7', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_8', 0.2,1.8)
     
     '''param_folder.open()'''
 
@@ -195,11 +196,12 @@ def Apartement(apartement_type, number):
     pass
 
 # Apartement variation functions
+#A1 = Loft
 def Apartement_1(number):
     if number == 1:
         variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],[1/4*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 0, 0, 0, 1/2*floorsettings.ratio_4, 0, 0])
     elif number == 2:
-        variante(['H', 'V', 'H', 0, 0, 0, 'V', 0, 0])
+        variante(['V', 'H', 0, 0, 0,],[1/4*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 0, 0, 0])
     elif number == 3:
         variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
     elif number == 4:
@@ -208,6 +210,7 @@ def Apartement_1(number):
         variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0])
     pass
 
+#A2 = single
 def Apartement_2(number):
     if number == 1:
         variante(['V', 'H', 'H', 'H',0,0, 0, 0, 0],[1/3*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 1/2*floorsettings.ratio_4, 0,0,0, 0, 0, 1/2*floorsettings.ratio_5, 0, 0])
@@ -221,9 +224,10 @@ def Apartement_2(number):
         variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0])
     pass
 
+#A3 = Family
 def Apartement_3(number,ratios):
     if number == 1:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],[1/4*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 0, 0, 0, 1/2*floorsettings.ratio_4, 0, 0])
     elif number == 2:
         variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
     elif number == 3:
