@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html data-wf-domain="magnuss-supercool-site-03e670.webflow.io" data-wf-page="63d7f11067d64ccd60ee4eb2"
+    data-wf-site="63d7f10f67d64c697aee4eaa" lang="en">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.121.0/build/three.js"></script>
+
+    <meta charset="utf-8" />
+    <title>planify. - plans with pleasure</title>
+    <meta content="plans made simple" name="description" />
+    <meta content="planify. - plans with pleasure" property="og:title" />
+    <meta content="plans made simple" property="og:description" />
+    <meta content="planify. - plans with pleasure" property="twitter:title" />
+    <meta content="plans made simple" property="twitter:description" />
+    <meta property="og:type" content="website" />
+    <meta content="summary_large_image" name="twitter:card" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="Webflow" name="generator" />
+    <link
+        href="./styles.css"
+        rel="stylesheet" type="text/css" />
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" type="text/javascript"></script><![endif]-->
+    <script
+        type="text/javascript">!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
+    <link href="https://uploads-ssl.webflow.com/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="https://uploads-ssl.webflow.com/img/webclip.png" rel="apple-touch-icon" />
+    <!-- [Attributes by Finsweet] Range Slider -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@finsweet/attributes-rangeslider@1/rangeslider.js"></script>
+    
+</head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <title>Document</title>
+
+    <!-- uRL for .css styling default from py-script-->
+    <link rel="stylesheet" href="style.css" />
+    <!-- uRL for including pyscript.js -->
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+    <!-- uRLs for including more js libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/build/three.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/examples/js/shaders/FXAAShader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.js"></script>
+    
+    <script>
+        function onChangeApartementSize() {
+            const element = document.getElementById("apartementSize")
+            window.localStorage.setItem("apartementSize", element.value)
+        }
+
+        function onChangeLivingroomSize() {
+            const element = document.getElementById("livingroomSize")
+            window.localStorage.setItem("livingroomSize", element.value)
+        }
+
+        function onChangeKitchenSize() {
+            const element = document.getElementById("kitchenSize")
+            window.localStorage.setItem("kitchenSize", element.value)
+        }
+
+        function onChangeMasterbedroomSize() {
+            const element = document.getElementById("MasterbedroomSize")
+            window.localStorage.setItem("MasterbedroomSize", element.value)
+        }
+
+        function onChangeBedroomSize() {
+            const element = document.getElementById("BedroomSize")
+            window.localStorage.setItem("BedroomSize", element.value)
+        }
+
+        function onChangeBathroomSize() {
+            const element = document.getElementById("BathroomSize")
+            window.localStorage.setItem("BathroomSize", element.value)
+        }
+
+        function onChangeKitchenSize() {
+            const element = document.getElementById("KitchenSize")
+            window.localStorage.setItem("KitchenSize", element.value)
+        }
+        
+        </script>
+</head>
+<body>
+    <py-script src="AAD.py">
+    </py-script>
+
+    <div class="page-wrapper" style="pointer-events: none;">
+        <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease"
+            role="banner" class="nav_component w-nav">
+            <div class="nav_container w-container"><a href="https://finsweet.com" target="_blank"
+                    class="nav_brand w-nav-brand"><img
+                        src="https://uploads-ssl.webflow.com/63d7f10f67d64c697aee4eaa/63d8018ea943d468a3d84b6b_Group%206.png"
+                        loading="lazy" alt="" class="nav_logo" />
+                    <div class="nav_logo-text">by Paul &amp; Magnus</div>
+                </a>
+                <div class="nav_button w-nav-button">
+                    <div class="w-icon-nav-menu"></div>
+                </div>
+            </div>
+        </div>
+        <div class="main-wrapper">
+            <div id="container"></div>
+                <div class="wf-section">
+                    <div class="padding-vertical padding-xxlarge">
+                        <div class="page-padding content" style="overflow: scroll; height: 100vh; padding-bottom: 300px; pointer-events: all;">
+                            <div class="container-2 w-container">
+                                <h1>Welcome!</h1>
+                                <div class="text-block-23 text-weight-bold">Configure your apartment today.</div>
+                                <div>Start with you apartment type, then<br />choose a layout variant.<br /></div>
+                            </div>
+                            <div class="container-2 w-container">
+                                <div class="w-layout-grid"><a href="#" class="button-2 w-button">Loft</a><a href="#"
+                                        class="button-2 w-button">Family</a><a href="#" class="button-2 w-button">Single</a>
+                                </div>
+                            </div>
+                            <div class="container-2 w-container">
+                                <div class="w-layout-grid"><a href="#" class="button-2 w-button">Spacious</a><a href="#"
+                                        class="button-2 w-button">Compact</a><a href="#"
+                                        class="button-2 w-button">Symmetrical</a><a href="#"
+                                        class="button-2 w-button">Open</a></div>
+                            </div>
+                            <div class="container">
+
+                                <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                    fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
+                                    <div class="text-block">Apartment size</div>
+                                    <input type="range" id="apartementSize" onchange="onChangeApartementSize()" style="display: none;" />
+                                    <div fs-rangeslider-element="track" class="fs-rangeslider_track">
+                                        <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
+                                        <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
+                                    </div>
+                                    
+                                    <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
+                                    </div>
+                                    <div class="w-form">
+                                        <form id="email-form" name="email-form" data-name="Email Form" method="get"><input
+                                                type="text" class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /><input type="text"
+                                                class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /></form>
+                                        <div class="w-form-done">
+                                            <div>Thank you! Your submission has been received!</div>
+                                        </div>
+                                        <div class="w-form-fail">
+                                            <div>Oops! Something went wrong while submitting the form.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div fs-rangeslider-step="40" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                    fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
+                                    <div class="text-block">living room size</div>
+                                    <input type="range" id="livingroomSize" onchange="onChangeLivingroomSize()" style="display: none;" />
+                                    <div fs-rangeslider-element="track" class="fs-rangeslider_track">
+                                        <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
+                                        <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
+                                    </div>
+                                    <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
+                                    </div>
+                                    <div class="w-form">
+                                        <form id="email-form" name="email-form" data-name="Email Form" method="get"><input
+                                                type="text" class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /><input type="text"
+                                                class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /></form>
+                                        <div class="w-form-done">
+                                            <div>Thank you! Your submission has been received!</div>
+                                        </div>
+                                        <div class="w-form-fail">
+                                            <div>Oops! Something went wrong while submitting the form.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                    fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
+                                    <div class="text-block">Kitchen size</div>
+                                    <input type="range" id="KitchenSize" onchange="onChangeKitchenSize()" style="display: none;" />
+                                    <div fs-rangeslider-element="track" class="fs-rangeslider_track">
+                                        <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
+                                        <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
+                                    </div>
+                                    <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
+                                    </div>
+                                    <div class="w-form">
+                                        <form id="email-form" name="email-form" data-name="Email Form" method="get"><input
+                                                type="text" class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /><input type="text"
+                                                class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /></form>
+                                        <div class="w-form-done">
+                                            <div>Thank you! Your submission has been received!</div>
+                                        </div>
+                                        <div class="w-form-fail">
+                                            <div>Oops! Something went wrong while submitting the form.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                    fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
+                                    <div class="text-block">Master bedroom size</div>
+                                    <input type="range" id="MasterbedroomSize" onchange="onChangeMasterbedroomSize()" style="display: none;" />
+                                    <div fs-rangeslider-element="track" class="fs-rangeslider_track">
+                                        <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
+                                        <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
+                                    </div>
+                                    <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
+                                    </div>
+                                    <div class="w-form">
+                                        <form id="email-form" name="email-form" data-name="Email Form" method="get"><input
+                                                type="text" class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /><input type="text"
+                                                class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /></form>
+                                        <div class="w-form-done">
+                                            <div>Thank you! Your submission has been received!</div>
+                                        </div>
+                                        <div class="w-form-fail">
+                                            <div>Oops! Something went wrong while submitting the form.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                    fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
+                                    <div class="text-block">Bedroom Size</div>
+                                    <input type="range" id="BedroomSize" onchange="onChangeBedroomSize()" style="display: none;" />
+                                    <div fs-rangeslider-element="track" class="fs-rangeslider_track">
+                                        <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
+                                        <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
+                                    </div>
+                                    <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
+                                    </div>
+                                    <div class="w-form">
+                                        <form id="email-form" name="email-form" data-name="Email Form" method="get"><input
+                                                type="text" class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /><input type="text"
+                                                class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /></form>
+                                        <div class="w-form-done">
+                                            <div>Thank you! Your submission has been received!</div>
+                                        </div>
+                                        <div class="w-form-fail">
+                                            <div>Oops! Something went wrong while submitting the form.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                    fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
+                                    <div class="text-block">bathroom size</div>
+                                    <input type="range" id="BathroomSize" onchange="onChangeBathroomSize()" style="display: none;" />
+
+                                    <div fs-rangeslider-element="track" class="fs-rangeslider_track">
+                                        <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
+                                        <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
+                                    </div>
+                                    <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
+                                    </div>
+                                    <div class="w-form">
+                                        <form id="email-form" name="email-form" data-name="Email Form" method="get"><input
+                                                type="text" class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /><input type="text"
+                                                class="fs-rangeslider_input w-input" maxlength="256" name="name"
+                                                data-name="Name" placeholder="" id="range-slider-input" /></form>
+                                        <div class="w-form-done">
+                                            <div>Thank you! Your submission has been received!</div>
+                                        </div>
+                                        <div class="w-form-fail">
+                                            <div>Oops! Something went wrong while submitting the form.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="container-2 w-container"><a href="#" class="button-2 w-button">Generate new layout .
+                                </a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=63d7f10f67d64c697aee4eaa"
+        type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+    <script src="./script.js"
+        type="text/javascript"></script>
+    <!--[if lte IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+</body>
+
+</html>
