@@ -67,18 +67,20 @@ def main():
     # Set up GUI
     global floorsettings, apartment_type, apartment_variation, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4
 
-    apartment_type = 1
+    apartment_type = 2
     apartment_variation = 1
-    floor_length_x = 15
+    floor_length_x = 10
     floor_length_y = 15
-    floor_ratio_1 = 1/2
-    floor_ratio_2 = 1/2
-    floor_ratio_3 = 1/2
-    floor_ratio_4 = 1/2
-    floor_ratio_5 = 1/2
-    floor_ratio_6 = 1/2
-    floor_ratio_7 = 1/2
-    floor_ratio_8 = 1/2
+    floor_ratio_1 = 1
+    floor_ratio_2 = 1
+    floor_ratio_3 = 1
+    floor_ratio_4 = 1
+    floor_ratio_5 = 1
+    floor_ratio_6 = 1
+    floor_ratio_7 = 1
+    floor_ratio_8 = 1
+
+    
 
     floorsettings = {
         "apartment_type": apartment_type,
@@ -98,22 +100,22 @@ def main():
 
     gui = window.dat.GUI.new()
     param_folder = gui.addFolder('Apatrment_Generation')
-    param_folder.add(floorsettings,'apartment_type', 1,20)
-    param_folder.add(floorsettings,'apartment_variation', 1,20)
+    param_folder.add(floorsettings,'apartment_type', 1,3,1)
+    param_folder.add(floorsettings,'apartment_variation', 1,5,1)
 
     param_folder = gui.addFolder('Floor Settings')
-    param_folder.add(floorsettings,'length_x', 1,20,1)
-    param_folder.add(floorsettings,'length_y', 1,20,1)
+    param_folder.add(floorsettings,'length_x', 1,20)
+    param_folder.add(floorsettings,'length_y', 1,20)
 
     param_folder = gui.addFolder('Ratios')
-    param_folder.add(floorsettings,'ratio_1', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_2', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_3', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_4', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_5', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_6', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_7', 0.2,0.7)
-    param_folder.add(floorsettings,'ratio_8', 0.2,0.7)
+    param_folder.add(floorsettings,'ratio_1', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_2', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_3', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_4', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_5', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_6', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_7', 0.1,0.9)
+    param_folder.add(floorsettings,'ratio_8', 0.1,0.9)
     
     '''param_folder.open()'''
 
@@ -148,21 +150,24 @@ def main():
     new_rooms.append(firstroom)
 
    
-
+    
 
 
     #Apartements
-    Apartment_GUI(floorsettings.apartment_type, floorsettings.apartment_variation,floorsettings.ratio_1,floorsettings.ratio_2,floorsettings.ratio_3,floorsettings.ratio_4,floorsettings.ratio_5,floorsettings.ratio_6,floorsettings.ratio_7,floorsettings.ratio_8)
-    '''Apartement(2,1,[1/2, 1/3, 3/4, 1/2, 0,0,0, 0, 0, 2/3, 0, 0])'''
+    '''Apartment_GUI(floorsettings.apartment_type, floorsettings.apartment_variation,floorsettings.ratio_1,floorsettings.ratio_2,floorsettings.ratio_3,floorsettings.ratio_4,floorsettings.ratio_5,floorsettings.ratio_6,floorsettings.ratio_7,floorsettings.ratio_8)'''
+    
+    
+    Apartement(floorsettings.apartment_type,floorsettings.apartment_variation)
     '''Apartement(1,1,[1/2, 1/3, 2/4, 0, 0, 0, 2/3, 0, 0])'''
+    
+    
+    print(new_rooms)
+    print(final_rooms)
+    
     #offset rooms for Wall vertices
     offset_out(new_rooms[0], 0.2)
     offset_in(final_rooms, 0.1)
-    
-    
-    drawrooms(final_rooms)
-    
-    
+    print(final_rooms)
 
     drawrooms(offset_rooms)
     drawrooms(offset_room_out)
@@ -170,58 +175,50 @@ def main():
     extrude(offset_room_out, offset_rooms)
     #squaremeters functions
     squaremeters(offset_rooms)
-    print(apartement_squaremeters(room_sqaremeters))
+
+    
+    print(offset_rooms)
     render()
 #-----------------------------------------------------------------------
 # HELPER FUNCTIONS
-
-#GUI function
-
-# Apartment GUI function
-def Apartment_GUI(type, variation,r1,r2,r3,r4,r5,r6,r7,r8):
-
-    if type == 1 & variation ==1:
-        Apartement(1,1,[r1, r2, r3, 0, 0, 0, r4, 0, 0])
-    pass
-
-
+    
 
 # Apartment function
-def Apartement(apartement_type, number, ratios):
+def Apartement(apartement_type, number):
 
     if apartement_type == 1:
-        Apartement_1(number,ratios)
+        Apartement_1(number)
     elif apartement_type == 2:
-         Apartement_2(number,ratios)
+         Apartement_2(number)
     elif apartement_type == 3:
-         Apartement_3(number,ratios)
+         Apartement_3(number)
     pass
 
 # Apartement variation functions
-def Apartement_1(number,ratios):
+def Apartement_1(number):
     if number == 1:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],[1/4*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 0, 0, 0, 1/2*floorsettings.ratio_4, 0, 0])
     elif number == 2:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['H', 'V', 'H', 0, 0, 0, 'V', 0, 0])
     elif number == 3:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
     elif number == 4:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
     elif number == 5:
-        variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0])
     pass
 
-def Apartement_2(number,ratios):
+def Apartement_2(number):
     if number == 1:
-        variante(['V', 'H', 'H', 'H',0,0, 0, 0, 0],ratios)
+        variante(['V', 'H', 'H', 'H',0,0, 0, 0, 0],[1/3*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 1/2*floorsettings.ratio_4, 0,0,0, 0, 0, 1/2*floorsettings.ratio_5, 0, 0])
     elif number == 2:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'V', 0, 0, 'H', 0, 0],[1/2, 1/4, 0, 0, 1/3, 0, 0])
     elif number == 3:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
     elif number == 4:
-        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
     elif number == 5:
-        variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0],ratios)
+        variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0])
     pass
 
 def Apartement_3(number,ratios):
