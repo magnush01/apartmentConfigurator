@@ -53,6 +53,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.9/dat.gui.js"></script>
     
     <script>
+        function storeValue1(value) {
+            localStorage.setItem("type", value);
+        }
+
+        function storeValue(value) {
+            localStorage.setItem("Variant", value);
+        }
+
+        function onChangevariant() {
+            const element = document.getElementById("variant")
+            window.localStorage.setItem("variant", element.value)
+        }
+
         function onChangeApartementSize() {
             const element = document.getElementById("apartementSize")
             window.localStorage.setItem("apartementSize", element.value)
@@ -87,6 +100,8 @@
             const element = document.getElementById("KitchenSize")
             window.localStorage.setItem("KitchenSize", element.value)
         }
+
+        
         
         </script>
 </head>
@@ -119,18 +134,25 @@
                                 <div>Start with you apartment type, then<br />choose a layout variant.<br /></div>
                             </div>
                             <div class="container-2 w-container">
-                                <div class="w-layout-grid"><a href="#" class="button-2 w-button">Loft</a><a href="#"
-                                        class="button-2 w-button">Family</a><a href="#" class="button-2 w-button">Single</a>
+                                <div class="w-layout-grid">
+                                    <button class="button-2 w-button" onclick="storeValue1(1)">Loft</button>
+                                    <button class="button-2 w-button" onclick="storeValue1(2)">Family</button>
+                                    <button class="button-2 w-button" onclick="storeValue1(3)">Single</button>
+                                    
                                 </div>
-                            </div>
+                                </div>
+                                <div class="container">
+                           
                             <div class="container-2 w-container">
-                                <div class="w-layout-grid"><a href="#" class="button-2 w-button">Spacious</a><a href="#"
-                                        class="button-2 w-button">Compact</a><a href="#"
-                                        class="button-2 w-button">Symmetrical</a><a href="#"
-                                        class="button-2 w-button">Open</a></div>
-                            </div>
-                            <div class="container">
-
+                                <div class="w-layout-grid">
+                                    <button class="button-2 w-button" onclick="storeValue(1)">Spacious</button>
+                                    <button class="button-2 w-button" onclick="storeValue(2)">Compact</button>
+                                    <button class="button-2 w-button" onclick="storeValue(3)">Symmetrical</button>
+                                    <button class="button-2 w-button" onclick="storeValue(4)">Open</button>
+                                </div>
+                                </div>
+                                <div class="container">
+                                        
                                 <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
                                     fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
                                     <div class="text-block">Apartment size</div>
@@ -139,7 +161,6 @@
                                         <div fs-rangeslider-element="fill" class="fs-rangeslider_fill"></div>
                                         <div fs-rangeslider-element="handle" class="fs-rangeslider_handle"></div>
                                     </div>
-                                    
                                     <div fs-rangeslider-element="display-value" class="fs-rangeslider_display-value">value
                                     </div>
                                     <div class="w-form">
@@ -157,7 +178,7 @@
                                     </div>
                                 </div>
 
-                                <div fs-rangeslider-step="40" fs-rangeslider-element="wrapper" fs-rangeslider-min="1"
+                                <div fs-rangeslider-step="1" fs-rangeslider-element="wrapper" fs-rangeslider-min="1" valuenow="50"
                                     fs-rangeslider-max="100" class="fs-rangeslider_wrapper">
                                     <div class="text-block">living room size</div>
                                     <input type="range" id="livingroomSize" onchange="onChangeLivingroomSize()" style="display: none;" />

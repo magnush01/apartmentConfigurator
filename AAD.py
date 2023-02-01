@@ -27,20 +27,29 @@ def main():
     back_color = THREE.Color.new(0xF0EEE9)
     scene.background = back_color
     camera = THREE.PerspectiveCamera.new(75, window.innerWidth/window.innerHeight, 0.1, 1000)
-    camera.position.z = 30
-    camera.position.x = 5
+    camera.position.y = 20
+    camera.position.x = 0
+    camera.lookAt(THREE.Vector3.new(100,100,100))
+    
     scene.add(camera)
 
     # Directional light
     color = 0xFFFFFF
-    intensity = 1
+    intensity = 0.5
     light = THREE.DirectionalLight.new(color, intensity)
-    light.position.set(0, 1, 0)
+    light.position.set(0, 20, -10)
+    scene.add(light)
+
+    # Directional light
+    color = 0xFFFFFF
+    intensity = 0.7
+    light = THREE.DirectionalLight.new(color, intensity)
+    light.position.set(-10, 20, 10)
     scene.add(light)
 
     # Spotlight
     spotLight1 = THREE.SpotLight.new(color, intensity)
-    spotLight1.position.set(0, 15, 15)
+    spotLight1.position.set(15, 15, 15)
     spotLight1.target.position.set(0, 0, 0)
     spotLight1.castShadow = True
     scene.add(spotLight1)
@@ -61,15 +70,16 @@ def main():
   
     # Set up Mouse orbit control
     controls = THREE.OrbitControls.new(camera, renderer.domElement)
+    '''THREE.Orbit.Controls.target(THREE.Vector3.new(100,100,100))'''
     # Axis Helper
-    axesHelper = THREE.AxesHelper.new(10)
-    scene.add(axesHelper)
+    '''axesHelper = THREE.AxesHelper.new(10)
+    scene.add(axesHelper)'''
     #-----------------------------------------------------------------------
     # Set up GUI
-    global floorsettings, apartment_type, apartment_variation, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4,r1,r2
+    global floorsettings, apartment_type, apartment_variation, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4, floor_ratio_5, floor_ratio_6, r1,r2
 
     apartment_type = 1
-    apartment_variation = 5
+    apartment_variation = 3
     floor_length_x = 10
     floor_length_y = 10
     
@@ -98,37 +108,42 @@ def main():
     gui = window.dat.GUI.new()
     param_folder = gui.addFolder('Apatrment_Generation')
     param_folder.add(floorsettings,'apartment_type', 1,3,1)
-    param_folder.add(floorsettings,'apartment_variation', 1,5,1)
+    param_folder.add(floorsettings,'apartment_variation', 1,4,1)
 
     param_folder = gui.addFolder('Floor Settings')
     param_folder.add(floorsettings,'length_x', 1,20)
     param_folder.add(floorsettings,'length_y', 1,20)
 
     param_folder = gui.addFolder('Ratios')
-    param_folder.add(floorsettings,'ratio_1', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_2', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_3', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_4', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_5', 0.2,1.8)
-    param_folder.add(floorsettings,'ratio_6', 0.2,1.8)
+    param_folder.add(floorsettings,'ratio_1', 0.2,1)
+    param_folder.add(floorsettings,'ratio_2', 0.2,1)
+    param_folder.add(floorsettings,'ratio_3', 0.2,1)
+    param_folder.add(floorsettings,'ratio_4', 0.2,1)
+    param_folder.add(floorsettings,'ratio_5', 0.2,1)
+    param_folder.add(floorsettings,'ratio_6', 0.2,1)
     
     '''param_folder.open()'''
 
     #-----------------------------------------------------------------------
     # Create Materials
     # Mesh Material
-    global material, line_material
+    global material, material1, line_material
     material = THREE.MeshPhongMaterial.new()
     material.color = THREE.Color.new(0xFFFFFF)
     material.transparent = True
     material.opacity = 1
 
+    material1 = THREE.MeshPhongMaterial.new()
+    material1.color = THREE.Color.new(0x815FFF)
+    material1.transparent = True
+    material1.opacity = 1
     # Line Material
     line_material = THREE.LineBasicMaterial.new()
     line_material.color = THREE.Color.new(0x1B1B1B)
     #-----------------------------------------------------------------------
     # Lists
     global final_rooms, lines, new_rooms, offset_rooms, shapes, room_sqaremeters
+
     #Roomlists
     # rooms = [room_1, room_2, ..., room_n] room_n = [point_1, point_2, point_3, point_4]
     final_rooms = []
@@ -154,64 +169,86 @@ def main():
     offset_in(final_rooms, 0.1)
 
 
-    drawrooms(offset_rooms)
-    drawrooms(offset_room_out)
+    '''drawrooms(offset_rooms)
+    drawrooms(offset_room_out)'''
     
     extrude(offset_room_out, offset_rooms)
+    extrude_floor(offset_room_out)
     #squaremeters functions
     '''squaremeters(offset_rooms)'''
-
 
     render()
 #-----------------------------------------------------------------------
 # HELPER FUNCTIONS
 
+# room definition
+def define_room(p1_x, p1_y, p2_x, p2_y, p3_x, p3_y, p4_x, p4_y):
+    room = []
+    p1 = p1_x, p1_y
+    p2 = p2_x, p2_y
+    p3 = p3_x, p3_y
+    p4 = p4_x, p4_y
+    room.append(p1)
+    room.append(p2) 
+    room.append(p3) 
+    room.append(p4)
+    return room
 
+# Function to subdivide a room vertically
+def subdivide_vertical(room, ratio):
+    global new_rooms
+    new_room1 = define_room(room[0][0], room[0][1], room[1][0] - ((room[1][0]-room[0][0]) * ratio), room[1][1], room[2][0] - ((room[2][0]-room[3][0]) * ratio), room[2][1], room[3][0], room[3][1])
+    new_room2 = define_room(room[1][0] - ((room[1][0]-room[0][0]) * ratio), room[0][1], room[1][0], room[1][1], room[2][0], room[2][1], room[2][0] - ((room[2][0]-room[3][0]) * ratio), room[3][1])
+    new_rooms.append(new_room1)
+    new_rooms.append(new_room2)
 
+# Function to subdivide a room horizontally
+def subdivide_horizontal(room, ratio):
+    global new_rooms
+    new_room1 = define_room(room[0][0], room[0][1], room[1][0], room[1][1], room[2][0], room [2][1] - ((room [2][1] - room [1][1]) * ratio), room[3][0], room[3][1] - (room[3][1] - room[0][1])* ratio)
+    new_room2 = define_room(room[0][0], room[3][1] - ((room[3][1] - room[0][1]) * ratio), room[1][0], room[2][1] - ((room[2][1] - room[1][1]) * ratio), room[2][0], room[2][1], room[3][0], room[3][1])
+    new_rooms.append(new_room1)
+    new_rooms.append(new_room2)
 
+# tree function for room variants      
+def variante(syntax, ratios):
+    
+    index = -1
+    for letter in syntax:
+        index +=1
+        if letter == 'V':
+            subdivide_vertical(new_rooms[index], ratios[index])
+        elif letter == 'H':
+            subdivide_horizontal(new_rooms[index], ratios[index])
+        else:
+            pass
+            final_rooms.append(new_rooms[index])
 
-'''def ratios_v():
-        if apartment_type == 1 & apartment_variation:
-            ratio_list = [1/2,1/3,1/4]
-            print(ratio_list)
-'''
-
-
-
-
-
-# Apartment function
-def Apartement(apartement_type, number):
-
-    if apartement_type == 1:
-        Apartement_1(number)
-    elif apartement_type == 2:
-         Apartement_2(number)
-    elif apartement_type == 3:
-         Apartement_3(number)
-    pass
+#Ratios
+global r1_1_1, r1_1_2, r1_1_3
+r1_1_1 = 1/3
+r1_1_2 = 1/4
+r1_1_3 = 1/5
 
 # Apartement variation functions
 #A1 = Loft
 def Apartement_1(number):
     if number == 1:
-        variante(['V', 'H', 'H', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
+        variante(['V', 'H', 'H', 0, 0,0 ,0],[1/3,1/2, 1/4, 0, 0, 0,0])
     elif number == 2:
-        variante(['H', 'H', 'V', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
+        variante(['H', 'H', 'V', 0, 0,0 ,0],[1/3,1/2, 1/4, 0, 0, 0,0])
     elif number == 3:
-        variante(['V', 0,'H', 'H', 0, 0 ,0],[floorsettings.ratio_1,0,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0,0])
+        variante(['V', 0,'H', 'H', 0, 0 ,0],[1/2,0,1/4, 1/2, 0, 0,0])
     elif number == 4:
-        variante(['V','H',0, 'H', 0, 0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2,0, floorsettings.ratio_3, 0, 0,0])
-    elif number == 5:
-        variante(['H', 'V', 'V', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
+        variante(['V','H',0, 'H', 0, 0 ,0],[1/2,1/4,0, 1/3, 0, 0,0])
     pass
 
 #A2 = Single
 def Apartement_2(number):
     if number == 1:
-        variante(['V', 'H', 'H', 'H',0,0, 0, 0, 0],[1/3*floorsettings.ratio_1, 1/2*floorsettings.ratio_2, 1/2*floorsettings.ratio_3, 1/2*floorsettings.ratio_4, 0,0,0, 0, 0, 1/2*floorsettings.ratio_5, 0, 0])
+        variante(['V', 'H', 'H', 'H',0,0, 0, 0, 0],[floorsettings.ratio_1,floorsettings.ratio_2,floorsettings.ratio_3,floorsettings.ratio_4, 0,0,0,0,0])
     elif number == 2:
-        variante(['V', 'V', 0, 0, 'H', 0, 0],[1/2, 1/4, 0, 0, 1/3, 0, 0])
+        variante(['H', 'V', 'H', 'H',0,0, 0, 0, 0],[floorsettings.ratio_1,floorsettings.ratio_2,floorsettings.ratio_3,floorsettings.ratio_4, 0,0,0,0,0])
     elif number == 3:
         variante(['V', 'H', 'V', 0, 0, 0, 'H', 0, 0])
     elif number == 4:
@@ -234,48 +271,36 @@ def Apartement_3(number,ratios):
         variante(['V', 'V', 'H', 0, 0, 0, 'H', 0, 0],ratios)
     pass
 
-# room definition
-def define_room(p1_x, p1_y, p2_x, p2_y, p3_x, p3_y, p4_x, p4_y):
-    room = []
-    p1 = p1_x, p1_y
-    p2 = p2_x, p2_y
-    p3 = p3_x, p3_y
-    p4 = p4_x, p4_y
-    room.append(p1)
-    room.append(p2) 
-    room.append(p3) 
-    room.append(p4)
-    return room
+# Apartment function
+def Apartement(apartement_type, number):
 
-# draw rooms
-def drawrooms(rooms):
+    if apartement_type == 1:
+        Apartement_1(number)
+    elif apartement_type == 2:
+         Apartement_2(number)
+    elif apartement_type == 3:
+         Apartement_3(number)
+    pass
 
-    
-    for line in lines:
-        scene.remove(line)
+#offset room outside function by changing the vertices
+def offset_out(room, d):
+    global new_rooms, offset_room_out
+    offset_room_out = []
+    offset_room = define_room(room[0][0] - d , room[0][1] - d , room[1][0] + d , room[1][1] - d , room[2][0] + d , room [2][1] + d, room[3][0] - d, room[3][1] + d)
+    offset_room_out.append(offset_room)
 
+#offset room inside function by changing the vertices
+def offset_in(rooms, d):
+    global new_rooms, offset_rooms
     for room in rooms:
-        points = []
-        point1 = THREE.Vector2.new(room[0][0],room[0][1])
-        point2 = THREE.Vector2.new(room[1][0],room[1][1])
-        point3 = THREE.Vector2.new(room[2][0],room[2][1])
-        point4 = THREE.Vector2.new(room[3][0],room[3][1])
+        offset_room = define_room(room[0][0] + d , room[0][1] + d , room[1][0] - d , room[1][1] + d , room[2][0] - d , room [2][1] - d, room[3][0] + d, room[3][1] - d)
+        offset_rooms.append(offset_room)
 
-        points.append(point1)
-        points.append(point2)
-        points.append(point3)
-        points.append(point4)
-        points.append(point1)
+#lists for update
 
-        line_geometry = THREE.BufferGeometry.new()
-        line_geometry.setFromPoints(to_js(points))
-        line = THREE.Line.new(line_geometry, line_material)
-        lines.append(line)
-        scene.add(line)
-
-# extrude Shape
-
+# extrude roomShapes
 def extrude(boundary, rooms):
+    global wall
     shape_geometry = THREE.Shape.new()
     #boundary extrusion
     shape_geometry.moveTo(boundary[0][0][0],boundary[0][0][1])
@@ -303,63 +328,45 @@ def extrude(boundary, rooms):
 	"steps": 10,
 	"depth": 3,
 	"bevelEnabled": False,
-	"bevelThickness": 1,
-	"bevelSize": 1,
-	"bevelOffset": 0,
-	"bevelSegments": 1
     }
     extrudeSettings = Object.fromEntries(to_js(extrudeSettings))
     geometry = THREE.ExtrudeGeometry.new( shape_geometry, extrudeSettings)
-    mesh = THREE.Mesh.new(geometry, material)
-    scene.add(mesh)
-
-
-#offset room inside function by changing the vertices
-def offset_in(rooms, d):
-    global new_rooms, offset_rooms
-    for room in rooms:
-        offset_room = define_room(room[0][0] + d , room[0][1] + d , room[1][0] - d , room[1][1] + d , room[2][0] - d , room [2][1] - d, room[3][0] + d, room[3][1] - d)
-        offset_rooms.append(offset_room)
-
-#offset room outside function by changing the vertices
-def offset_out(room, d):
-    global new_rooms, offset_room_out
-    offset_room_out = []
-    offset_room = define_room(room[0][0] - d , room[0][1] - d , room[1][0] + d , room[1][1] - d , room[2][0] + d , room [2][1] + d, room[3][0] - d, room[3][1] + d)
-    offset_room_out.append(offset_room)
-
-
-
-# tree function for room variants      
-def variante(syntax, ratios):
     
-    index = -1
-    for letter in syntax:
-        index +=1
-        if letter == 'V':
-            subdivide_vertical(new_rooms[index], ratios[index])
-        elif letter == 'H':
-            subdivide_horizontal(new_rooms[index], ratios[index])
-        else:
-            pass
-            final_rooms.append(new_rooms[index])
-
-# Function to subdivide a room vertically
-def subdivide_vertical(room, ratio):
-    global new_rooms
-    new_room1 = define_room(room[0][0], room[0][1], room[1][0] - ((room[1][0]-room[0][0]) * ratio), room[1][1], room[2][0] - ((room[2][0]-room[3][0]) * ratio), room[2][1], room[3][0], room[3][1])
-    new_room2 = define_room(room[1][0] - ((room[1][0]-room[0][0]) * ratio), room[0][1], room[1][0], room[1][1], room[2][0], room[2][1], room[2][0] - ((room[2][0]-room[3][0]) * ratio), room[3][1])
-    new_rooms.append(new_room1)
-    new_rooms.append(new_room2)
+    wall = THREE.Mesh.new(geometry, material)
+    wall.translateX(-(floor_length_x*0.8))
+    wall.translateZ(-(floor_length_y*1/2))
+    wall.rotateX(3.14159265359*1/2)
+    scene.add(wall)
 
 
-# Function to subdivide a room horizontally
-def subdivide_horizontal(room, ratio):
-    global new_rooms
-    new_room1 = define_room(room[0][0], room[0][1], room[1][0], room[1][1], room[2][0], room [2][1] - ((room [2][1] - room [1][1]) * ratio), room[3][0], room[3][1] - (room[3][1] - room[0][1])* ratio)
-    new_room2 = define_room(room[0][0], room[3][1] - ((room[3][1] - room[0][1]) * ratio), room[1][0], room[2][1] - ((room[2][1] - room[1][1]) * ratio), room[2][0], room[2][1], room[3][0], room[3][1])
-    new_rooms.append(new_room1)
-    new_rooms.append(new_room2)
+def extrude_floor(boundary):
+    global floor
+    shape_geometry = THREE.Shape.new()
+    #boundary extrusion
+    shape_geometry.moveTo(boundary[0][0][0],boundary[0][0][1])
+    shape_geometry.lineTo(boundary[0][1][0],boundary[0][1][1])
+    shape_geometry.lineTo(boundary[0][2][0],boundary[0][2][1])
+    shape_geometry.lineTo(boundary[0][3][0],boundary[0][3][1])
+    shape_geometry.lineTo(boundary[0][0][0],boundary[0][0][1])
+    
+    extrudeSettings = (-1,-1,False,0,0,0,0)
+    extrudeSettings = {
+	"steps": 10,
+	"depth": 0.5,
+	"bevelEnabled": False,
+    }
+    extrudeSettings = Object.fromEntries(to_js(extrudeSettings))
+    geometry = THREE.ExtrudeGeometry.new( shape_geometry, extrudeSettings)
+    
+    floor = THREE.Mesh.new(geometry, material1)
+    floor.translateX(-(floor_length_x*0.8))
+    floor.translateZ(-(floor_length_y*1/2))
+    floor.translateY(-3)
+    floor.rotateX(3.14159265359*1/2)
+    scene.add(floor)
+
+#---------------------------
+#unnecessary functions
 
 # Function to get list of room squaremeters
 def squaremeters(rooms):
@@ -379,41 +386,138 @@ def apartement_squaremeters(squaremeter_list):
     total_squaremeters = sum(squaremeter_list)
     return total_squaremeters
 
-#-----------------------------------------------------------------------------------
+# draw rooms
+def drawrooms(rooms):
 
+    
+    for line in lines:
+        scene.remove(line)
+
+    for room in rooms:
+        points = []
+        point1 = THREE.Vector2.new(room[0][0],room[0][1])
+        point2 = THREE.Vector2.new(room[1][0],room[1][1])
+        point3 = THREE.Vector2.new(room[2][0],room[2][1])
+        point4 = THREE.Vector2.new(room[3][0],room[3][1])
+
+        points.append(point1)
+        points.append(point2)
+        points.append(point3)
+        points.append(point4)
+        points.append(point1)
+
+        line_geometry = THREE.BufferGeometry.new()
+        line_geometry.setFromPoints(to_js(points))
+        line = THREE.Line.new(line_geometry, line_material)
+        lines.append(line)
+        scene.add(line)
+#-----------------------------------------------------------------------------------
 
 # update
 def update():
-    global original_room, floor_length_x, floor_length_y, floor_ratio, floor_iterations
+    global walls, room, floor_length_x, floor_length_y, floor_ratio_1, floor_ratio_2, floor_ratio_3, floor_ratio_4, floor_ratio_5, floor_ratio_6, final_rooms, lines, new_rooms, offset_rooms, shapes, room_sqaremeters
 
+
+    floor_length_x = int(window.localStorage.getItem("apartementSize"))
+    floor_length_y = int(window.localStorage.getItem("apartemenSize"))
+    floor_ratio_1  = int(window.localStorage.getItem("livingroomSize"))
+    floor_ratio_2  = int(window.localStorage.getItem("kitchenSize"))
+    floor_ratio_3  = int(window.localStorage.getItem("bedroomSize"))
+    floor_ratio_4  = int(window.localStorage.getItem("bathroomSize"))
+    floor_ratio_5  = int(window.localStorage.getItem("MasterbedroomSize"))
+    print(int(window.localStorage.getItem("apartementSize")))
+    
+    #update functions for the floor lenghts
     if floorsettings.length_x != floor_length_x or floorsettings.length_y != floor_length_y:
-        original_room = []
+        
+        scene.remove(wall)
+        scene.remove(floor)
+        room = []
         floor_length_x = floorsettings.length_x
         floor_length_y = floorsettings.length_y
 
-        update_room = define_room(-0.5*floorsettings.length_x, -0.5*floorsettings.length_y, 0.5*floorsettings.length_x, -0.5*floorsettings.length_y, 0.5*floorsettings.length_x , 0.5*floorsettings.length_y, -0.5*floorsettings.length_x, 0.5*floorsettings.length_y)
-        original_room.append(update_room)
-        subdivide_vertical(original_room, floorsettings.public_private)
-        subdivide_horizontal(new_rooms, floorsettings.public_private)
-        drawrooms(new_rooms)
+        final_rooms = []
+        lines = []
+        new_rooms = []
+        offset_rooms = []
+        shapes = []
+        room_sqaremeters = []
 
-    '''elif floorsettings.public_private != floor_ratio or floorsettings.iterations != floor_iterations:
-        floor_ratio = floorsettings.public_private
-        floor_iterations = floorsettings.iterations
+        update_room = define_room(0, 0, floorsettings.length_x, 0, floorsettings.length_x , floorsettings.length_y, 0, floorsettings.length_y)
+        new_rooms.append(update_room)
 
-        subdivide_vertical(original_room, floorsettings.public_private)
-        subdivide_horizontal(new_rooms, floorsettings.public_private)
-        drawrooms(new_rooms)'''
+        Apartement(floorsettings.apartment_type,floorsettings.apartment_variation)
 
-    '''else:'''
-    pass
+        offset_out(new_rooms[0], 0.2)
+        offset_in(final_rooms, 0.1)
+        
+        extrude(offset_room_out, offset_rooms)
+        extrude_floor(offset_room_out)
+        scene.add(wall)
+        scene.add(floor)
+    
+    elif  floorsettings.ratio_1 != floor_ratio_1 or floorsettings.ratio_2 != floor_ratio_2 or floorsettings.ratio_3 != floor_ratio_3 or floorsettings.ratio_4 != floor_ratio_4 or floorsettings.ratio_5 != floor_ratio_5 or floorsettings.ratio_6 != floor_ratio_6: 
+        scene.remove(wall)
+        scene.remove(floor)
+        room = []
+        final_rooms = []
+        lines = []
+        new_rooms = []
+        offset_rooms = []
+        shapes = []
+        room_sqaremeters = []
+        floor_ratio_1 = floorsettings.ratio_1
+        floor_ratio_2 = floorsettings.ratio_2
+        floor_ratio_3 = floorsettings.ratio_3
+        floor_ratio_4 = floorsettings.ratio_4
+        floor_ratio_5 = floorsettings.ratio_5
+        floor_ratio_6 = floorsettings.ratio_6
+      
+
+        update_room = define_room(0, 0, floorsettings.length_x, 0, floorsettings.length_x , floorsettings.length_y, 0, floorsettings.length_y)
+        new_rooms.append(update_room)
+
+        Apartement(floorsettings.apartment_type,floorsettings.apartment_variation)
+
+        offset_out(new_rooms[0], 0.2)
+        offset_in(final_rooms, 0.1)
+        
+        extrude(offset_room_out, offset_rooms)
+        extrude_floor(offset_room_out)
+        scene.add(wall)
+        scene.add(floor)
+        
+        #-----------------------
+        # Apartement variation functions
+        #A1 = Loft
+        '''def Apartement_1(number):
+            if number == 1:
+                variante(['V', 'H', 'H', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
+            elif number == 2:
+                variante(['H', 'H', 'V', 0, 0,0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0, 0,0])
+            elif number == 3:
+                variante(['V', 0,'H', 'H', 0, 0 ,0],[floorsettings.ratio_1,0,floorsettings.ratio_2, floorsettings.ratio_3, 0, 0,0])
+            elif number == 4:
+                variante(['V','H',0, 'H', 0, 0 ,0],[floorsettings.ratio_1,floorsettings.ratio_2,0, floorsettings.ratio_3, 0, 0,0])
+            pass'''
+
+
+        #------------------------
+    else:
+        pass
+
+        
+
         
 # Simple render and animate
 def render(*args):
     window.requestAnimationFrame(create_proxy(render))
-    #update()
+    update()
     controls.update()
     composer.render()
+    
+    
+    
 
 # Graphical post-processing
 def post_process():
